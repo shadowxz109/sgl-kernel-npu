@@ -14,6 +14,7 @@
 
 #include "zbccl_mem_allocator.h"
 #include "zbccl_operations.h"
+#include "zbccl_def.h"
 
 #ifdef __cplusplus
 extern "C" {

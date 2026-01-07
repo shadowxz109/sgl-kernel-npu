@@ -19,6 +19,29 @@ class Func
 {
 public:
 };
+
+inline size_t getSizeFromTypeEnum(zbccl_datatype_t dtype)
+{
+    switch (dtype) {
+        case zbccl_datatype_t::ZCCL_DATA_TYPE_INT8:
+            return sizeof(int8_t);
+        case zbccl_datatype_t::ZCCL_DATA_TYPE_INT16:
+            return sizeof(int16_t);
+        case zbccl_datatype_t::ZCCL_DATA_TYPE_INT32:
+            return sizeof(int32_t);
+        case zbccl_datatype_t::ZCCL_DATA_TYPE_INT64:
+            return sizeof(int64_t);
+        case zbccl_datatype_t::ZCCL_DATA_TYPE_FP16:
+            return sizeof(int16_t);
+        case zbccl_datatype_t::ZCCL_DATA_TYPE_FP32:
+            return sizeof(float);
+        case zbccl_datatype_t::ZCCL_DATA_TYPE_BFP16:
+            return sizeof(int16_t);
+        default:
+            break;
+    }
+}
+
 }  // namespace zbccl
 
 #endif  // ZBCCL_FUNCTIONS_H

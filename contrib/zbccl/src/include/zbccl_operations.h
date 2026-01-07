@@ -66,8 +66,22 @@ int32_t zbccl_reduce_scatter(const void *send_buff, void *recv_buff, size_t recv
  * @param stream           [in] stream
  * @return
  */
-int32_t zbccl_all_gather(const void *send_buff, void *recv_buff, size_t send_count, zbccl_datatype_t data_type,
-                         zbccl_comm_t comm, aclrtStream stream);
+int32_t zbccl_all_gather(void *send_buff, void *recv_buff, size_t send_count, zbccl_datatype_t data_type,
+                         size_t team_id, aclrtStream stream);
+ 
+/**
+ * @brief Do all gather operation
+ *
+ * @param send_buff        [in] pointer of send buffer
+ * @param recv_buff        [in] pointer of receive buffer
+ * @param send_count       [in] size of buffer
+ * @param data_type        [in] data type
+ * @param comm             [in] zbccl communication handle
+ * @param stream           [in] stream
+ * @return
+ */
+int32_t zbccl_all_gather_zero_buffer(const void *send_buff, void *recv_buff, size_t send_count, zbccl_datatype_t data_type,
+                         size_t team_id, aclrtStream stream);                         
 
 #ifdef __cplusplus
 }

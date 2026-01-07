@@ -5,6 +5,7 @@ BUILD_DEEPEP_MODULE="ON"
 BUILD_DEEPEP_OPS="ON"
 BUILD_KERNELS_MODULE="ON"
 BUILD_MEMORY_SAVER_MODULE="ON"
+BUILD_ZBCCL_MODULE="ON"
 
 ONLY_BUILD_DEEPEP_ADAPTER_MODULE="OFF"
 ONLY_BUILD_DEEPEP_KERNELs_MODULE="OFF"
@@ -18,6 +19,7 @@ while getopts ":a:hd" opt; do
             BUILD_DEEPEP_MODULE="OFF"
             BUILD_KERNELS_MODULE="OFF"
             BUILD_MEMORY_SAVER_MODULE="OFF"
+            BUILD_ZBCCL_MODULE="OFF"
             case "$OPTARG" in
                 deepep )
                     BUILD_DEEPEP_MODULE="ON"
@@ -26,6 +28,9 @@ while getopts ":a:hd" opt; do
                 deepep2 )
                     BUILD_DEEPEP_MODULE="ON"
                     BUILD_DEEPEP_OPS="OFF"
+                    ;;
+                zbccl )
+                    BUILD_ZBCCL_MODULE="ON"
                     ;;
                 kernels )
                     BUILD_KERNELS_MODULE="ON"
@@ -61,6 +66,7 @@ while getopts ":a:hd" opt; do
             echo "    deepep-adapter    Only build deepep adapter layer and use old build of deepep kernels."
             echo "    deepep-kernels    Only build deepep kernels and use old build of deepep adapter layer."
             echo "    memory-saver      Only build torch_memory_saver (under contrib)."
+            echo "    zbccl             Only build zbccl (under contrib)."
             exit 1
             ;;
         \? )
@@ -129,7 +135,7 @@ function build_kernels()
     rm -rf $BUILD_DIR
     mkdir -p $BUILD_DIR
 
-    cmake $COMPILE_OPTIONS -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" -DASCEND_HOME_PATH=$ASCEND_HOME_PATH -DASCEND_INCLUDE_DIR=$ASCEND_INCLUDE_DIR -DSHMEM_HOME_PATH=$SHMEM_HOME_PATH -DSOC_VERSION=$SOC_VERSION -DBUILD_DEEPEP_MODULE=$BUILD_DEEPEP_MODULE -DBUILD_KERNELS_MODULE=$BUILD_KERNELS_MODULE -B "$BUILD_DIR" -S .
+    cmake $COMPILE_OPTIONS -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" -DASCEND_HOME_PATH=$ASCEND_HOME_PATH -DASCEND_INCLUDE_DIR=$ASCEND_INCLUDE_DIR -DSHMEM_HOME_PATH=$SHMEM_HOME_PATH -DSOC_VERSION=$SOC_VERSION -DBUILD_DEEPEP_MODULE=$BUILD_DEEPEP_MODULE -DBUILD_KERNELS_MODULE=$BUILD_KERNELS_MODULE -DBUILD_ZBCCL_MODULE=$BUILD_ZBCCL_MODULE -B "$BUILD_DIR" -S .
     cmake --build "$BUILD_DIR" -j8 && cmake --build "$BUILD_DIR" --target install
     cd -
 }
