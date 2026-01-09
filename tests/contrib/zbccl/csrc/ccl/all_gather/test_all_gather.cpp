@@ -35,8 +35,6 @@ using bfloat16 = op::bfloat16;
 #include "shmem_api.h"
 #include "zbccl.h"
 
-using namespace zbccl;
-
 int g_npus = 8;
 const char *ipport;
 int f_rank = 0;
@@ -75,7 +73,7 @@ int test_shmem_allgather(int rank_id, int n_ranks, uint64_t local_mem_size, bool
     }
 
     uint32_t reduceOp = 0;
-    ZCCLDataType dataType = ZCCLDataType::ZCCL_DATA_TYPE_FP32;
+    ZCCLDataType dataType = ZCCLDataType::ZCCL_DATA_TYPE_BFP16;
     int teamId = 0;
     std::string cwd = getEnvVar("PWD");
 
@@ -109,13 +107,7 @@ int test_shmem_allgather(int rank_id, int n_ranks, uint64_t local_mem_size, bool
 
         // AllGather
         for (int zz = 0; zz < PERF_TIMES; zz++) {
-            if (zero_buff) {
-                zbccl_all_gather_zero_buffer(input_ptr, output_ptr, trans_size,
-                    dataType, teamId, stream);
-            } else {
-                zbccl_all_gather(input_ptr, output_ptr, trans_size,
-                    dataType, teamId, stream);
-            }
+            zbccl_all_gather(input_ptr, output_ptr, trans_size, dataType, teamId, stream);
         }
         status = aclrtSynchronizeStream(stream);
 
@@ -138,7 +130,7 @@ int test_shmem_allgather(int rank_id, int n_ranks, uint64_t local_mem_size, bool
         std::string goldenFile = cwd + "/golden/allgather_" +
             std::to_string(trans_size) + "_" + std::to_string(n_ranks) + "/golden.bin";
         ReadFile(goldenFile, golden_host, output_size);
-        for (int zz = 0; zz < trans_size / n_ranks; zz++) {
+        for (int zz = 0; zz < trans_size; zz++) {
             if (!fpEquals(static_cast<float>(output_host[zz]), static_cast<float>(golden_host[zz]))) {
                 std::cout << static_cast<float>(output_host[zz]) << " != " << static_cast<float>(golden_host[zz])
                           << ", trans_size is : " << trans_size << ", idx is: " << zz

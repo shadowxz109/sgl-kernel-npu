@@ -10,12 +10,11 @@
 import os
 import numpy as np
 
-# from ml_dtypes import bfloat16
+from ml_dtypes import bfloat16
 
 
 def gen_random_data(size, dtype):
-    return np.ones_like(size, dtype=dtype)
-    # return np.random.uniform(low=0.0, high=10.0, size=size).astype(dtype)
+    return np.random.uniform(low=0.0, high=10.0, size=size).astype(dtype)
 
 
 def golden_generate(data_len, rank_size, data_type):
@@ -48,12 +47,13 @@ def gen_golden_data():
         "int32_t": np.int32,
         "float": np.float32,
         "float16_t": np.float16,
+        'bfloat16_t': bfloat16
     }
 
     data_type = type_map.get(args.test_type, 'float16_t')
     rank_size = args.rank_size
 
-    case_num = int(os.getenv("CASE_NUM", "1"))
+    case_num = int(os.getenv("CASE_NUM", "20"))
     for i in range(case_num):
         data_len = 16 * (2 ** i)
         golden_generate(data_len, rank_size, data_type)

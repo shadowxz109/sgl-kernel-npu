@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(sgl-kernel-npu LANGUAGES CXX)
 
 option(BUILD_PYTHON "build python SDK" ON)
-option(BUILD_TESTS  "build test or not" OFF)
+option(BUILD_TESTS  "build test or not" ON)
 
 option(BUILD_DEEPEP_MODULE "build deepep" ON)
 option(BUILD_KERNELS_MODULE  "build kernels" ON)
@@ -60,4 +60,8 @@ endif ()
 
 if (BUILD_ZBCCL_MODULE)
     add_subdirectory(contrib/zbccl)
+endif ()
+
+if (BUILD_TESTS)
+    add_subdirectory(tests/contrib/zbccl/csrc/ccl)
 endif ()

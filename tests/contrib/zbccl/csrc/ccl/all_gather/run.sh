@@ -6,15 +6,13 @@ CURRENT_DIR=$(
 TEST_ROOT=$(dirname ${CURRENT_DIR})
 
 
-RANK_SIZE="2"
+RANK_SIZE="4"
 IPPORT="tcp://127.0.0.1:8776"
-GNPU_NUM="2"
+GNPU_NUM="4"
 FIRST_NPU="0"
 FIRST_RANK="0"
-TEST_TYPE="float"
+TEST_TYPE="bfloat16_t"
 ZERO_BUFF=0
-
-ZCCL_LIB_DIR=${TEST_ROOT}/zccl/lib
 
 # Golden generate
 rm -rf golden output
@@ -25,7 +23,7 @@ python3 ./scripts/data_gen.py $RANK_SIZE $TEST_TYPE
 export LD_LIBRARY_PATH=${ZCCL_LIB_DIR}:${TEST_ROOT}/out/lib:${SHMEM_HOME_PATH}/shmem/lib/:${SHMEM_HOME_PATH}/memfabric_hybrid/lib/:${ASCEND_HOME_PATH}/lib64:$LD_LIBRARY_PATH
 pids=()
 for (( idx =0; idx < ${GNPU_NUM}; idx = idx + 1 )); do
-    msprof --application="${TEST_ROOT}/out/bin/ascendc_all_gather $RANK_SIZE $idx $IPPORT $GNPU_NUM $FIRST_RANK $FIRST_NPU $TEST_TYPE $ZERO_BUFF" --output=${CURRENT_DIR}/output/ &
+    msprof --application="${TEST_ROOT}/output/ascendc_all_gather $RANK_SIZE $idx $IPPORT $GNPU_NUM $FIRST_RANK $FIRST_NPU $TEST_TYPE $ZERO_BUFF" --output=${CURRENT_DIR}/output/ &
     pid=$!
     pids+=("$pid")
     echo "$pid background process recorded"

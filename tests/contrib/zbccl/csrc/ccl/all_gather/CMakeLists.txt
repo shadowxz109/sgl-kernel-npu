@@ -12,6 +12,8 @@ if(CMAKE_INSTALL_PREFIX STREQUAL /usr/local)
     set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_LIST_DIR}/out" CACHE STRING "path for install()" FORCE)
 endif()
 
+set(ZBCCL_TEST_ROOT ${PROJECT_SOURCE_DIR}/tests/contrib/zbccl/csrc/ccl)
+set(ZBCCL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/contrib/zbccl/src/include)
 
 add_executable(ascendc_all_gather ${CMAKE_CURRENT_SOURCE_DIR}/test_all_gather.cpp)
 
@@ -22,8 +24,9 @@ target_compile_options(ascendc_all_gather PRIVATE
 target_include_directories(ascendc_all_gather PRIVATE
     ${SHMEM_HOME_PATH}/shmem/include
     ${SHMEM_HOME_PATH}/memfabric_hybrid/include/smem/host
-    ${ZCCL_TEST_ROOT}/utils
+    ${ZBCCL_TEST_ROOT}/utils
     ${ASCEND_INCLUDE_DIR}
+    ${ASCEND_INCLUDE_DIR}/aclnn
     ${ASCEND_INCLUDE_DIR}/aclnn/opdev
     ${ZCCL_INCLUDE_DIR}
 )
@@ -32,13 +35,13 @@ target_link_directories(ascendc_all_gather PRIVATE
     ${SHMEM_HOME_PATH}/shmem/lib/
     ${SHMEM_HOME_PATH}/memfabric_hybrid/lib
     ${ASCEND_HOME_PATH}/lib64
-    ${ZCCL_LIB_DIR}
+    ${ZBCCL_LIB_DIR}
 )
 
 target_link_libraries(ascendc_all_gather PRIVATE
     ascendcl
     nnopbase
-    zccl
+    zbccl
     shmem
     mf_smem
     mf_hybm_core

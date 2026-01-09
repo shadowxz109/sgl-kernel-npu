@@ -285,11 +285,11 @@ public:
         shmem_signal_wait_until((__gm__ int32_t *)shmem_ptr(gva_sync_gm, x) + flag_offset, SHMEM_CMP_EQ, magic);
 
         // [AllGather Step 2] symmetric mem -> local output.
-        num_per_core = this->output_core_per_rank;
+        num_per_core = this->output_num_per_core;
         output_offset = x * elements + core_rank_idx * num_per_core;
         gva_offset = core_rank_idx * num_per_core;
         if (core_rank_idx == core_per_rank - 1) {
-            num_per_core = elements - core_rank_idx * num_per_core;
+            num_per_core = this->output_last_num_core;
         }
 
         shmem_mte_get_mem_nbi(outputGT[output_offset], dataGT[gva_offset], tmp_buff, num_per_core, x, EVENT_ID0);
