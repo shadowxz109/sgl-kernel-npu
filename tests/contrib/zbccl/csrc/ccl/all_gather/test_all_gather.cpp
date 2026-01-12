@@ -73,7 +73,7 @@ int test_shmem_allgather(int rank_id, int n_ranks, uint64_t local_mem_size, bool
     }
 
     uint32_t reduceOp = 0;
-    ZCCLDataType dataType = ZCCLDataType::ZCCL_DATA_TYPE_BFP16;
+    zbccl_datatype_t dataType = zbccl_datatype_t::ZCCL_DATA_TYPE_BFP16;
     int teamId = 0;
     std::string cwd = getEnvVar("PWD");
 
@@ -107,7 +107,11 @@ int test_shmem_allgather(int rank_id, int n_ranks, uint64_t local_mem_size, bool
 
         // AllGather
         for (int zz = 0; zz < PERF_TIMES; zz++) {
-            zbccl_all_gather(input_ptr, output_ptr, trans_size, dataType, teamId, stream);
+            if (zero_buff) {
+                zbccl_all_gather_zero_buffer(input_ptr, output_ptr, trans_size, dataType, teamId, stream);
+            } else {
+                zbccl_all_gather(input_ptr, output_ptr, trans_size, dataType, teamId, stream);
+            }
         }
         status = aclrtSynchronizeStream(stream);
 

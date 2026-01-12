@@ -16,6 +16,7 @@
 #include "acl/acl.h"
 #include "shmem_api.h"
 #include "aclrtlaunch_allgather.h"
+#include "aclrtlaunch_allgather_zero_buffer.h"
 #include "zbccl.h"
 #include "zbccl_op.h"
 #include "../common/zbccl_functions.h"
@@ -80,7 +81,6 @@ int32_t zbccl_all_gather_zero_buffer(void *send_buff, void *recv_buff, size_t se
     }else {
         block_dim = 16;
     }
-    int magic = 1024;
 
     void *tiling_device_ptr;
     aclrtMalloc(&tiling_device_ptr, sizeof(AllGatherTilingData), ACL_MEM_MALLOC_HUGE_FIRST);
@@ -90,15 +90,11 @@ int32_t zbccl_all_gather_zero_buffer(void *send_buff, void *recv_buff, size_t se
 
     aclrtMemcpy(tiling_device_ptr, sizeof(AllGatherTilingData), tiling_host.get(), sizeof(AllGatherTilingData), ACL_MEMCPY_HOST_TO_DEVICE);
     uint64_t ffts_addr = shmemx_get_ffts_config();
-    size_t gva_size = block_dim * SYNC_FLAG_INTERVAL * sizeof(int) + GVA_BUFF_MAX_SIZE;
-    void *gva = shmem_malloc(gva_size);
-    aclrtMemset(gva, gva_size, 0, gva_size);
     int data_type_int = static_cast<int>(data_type);
 
-    ACLRT_LAUNCH_KERNEL(allgather)(block_dim, stream, send_buff, recv_buff, gva, send_count, data_type_int, team_id, ffts_addr, magic, tiling_device_ptr);
+    ACLRT_LAUNCH_KERNEL(allgather_zero_buffer)(block_dim, stream, send_buff, recv_buff, send_count, data_type_int, team_id, ffts_addr, tiling_device_ptr);
     aclrtFreeHost(tiling_host.get());
     aclrtFree(tiling_device_ptr);
-    shmem_free(gva);
     return 0;
 }
 
@@ -108,6 +104,12 @@ extern "C" ZBCCL_API int32_t zbccl_all_gather(void *send_buff, void *recv_buff, 
                          size_t team_id, aclrtStream stream) 
 {
     return zbccl::zbccl_all_gather(send_buff, recv_buff, send_count, data_type, team_id, stream);
+}
+
+extern "C" ZBCCL_API int32_t zbccl_all_gather_zero_buffer(void *send_buff, void *recv_buff, size_t send_count, zbccl_datatype_t data_type,
+                         size_t team_id, aclrtStream stream) 
+{
+    return zbccl::zbccl_all_gather_zero_buffer(send_buff, recv_buff, send_count, data_type, team_id, stream);
 }
 
 #endif  // ZBCCL_OP_ALLGATHER_H

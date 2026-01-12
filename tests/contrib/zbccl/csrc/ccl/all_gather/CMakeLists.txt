@@ -28,7 +28,7 @@ target_include_directories(ascendc_all_gather PRIVATE
     ${ASCEND_INCLUDE_DIR}
     ${ASCEND_INCLUDE_DIR}/aclnn
     ${ASCEND_INCLUDE_DIR}/aclnn/opdev
-    ${ZCCL_INCLUDE_DIR}
+    ${ZBCCL_INCLUDE_DIR}
 )
 
 target_link_directories(ascendc_all_gather PRIVATE

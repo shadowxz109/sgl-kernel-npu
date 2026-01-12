@@ -80,7 +80,7 @@ int32_t zbccl_all_gather(void *send_buff, void *recv_buff, size_t send_count, zb
  * @param stream           [in] stream
  * @return
  */
-int32_t zbccl_all_gather_zero_buffer(const void *send_buff, void *recv_buff, size_t send_count, zbccl_datatype_t data_type,
+int32_t zbccl_all_gather_zero_buffer(void *send_buff, void *recv_buff, size_t send_count, zbccl_datatype_t data_type,
                          size_t team_id, aclrtStream stream);                         
 
 #ifdef __cplusplus

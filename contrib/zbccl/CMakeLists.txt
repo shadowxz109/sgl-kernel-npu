@@ -24,6 +24,7 @@ set(OP_PLUGIN_NAME zbccl)
 
 ascendc_library(zbccl_kernel STATIC
     ${ZBCCL_SRC_DIR}/csrc/ccl/device/zbccl_kernel_allgather.cpp
+    ${ZBCCL_SRC_DIR}/csrc/ccl/device/zbccl_kernel_allgather_zero_buffer.cpp
 )
 
 ascendc_include_directories(zbccl_kernel PRIVATE
