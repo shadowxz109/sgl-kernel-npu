@@ -27,6 +27,14 @@ enum ZResultErrorCode : ZResult {
     Z_NEW_OBJ_FAILED = -3,
 };
 
+enum ReduceOp {
+    REDUCE_SUM = 0,
+    REDUCE_PROD = 1,
+    REDUCE_MAX = 2,
+    REDUCE_MIN = 3,
+    REDUCE_RESERVED = 255
+};
+
 #define ZBCCL_API __attribute__((visibility("default")))
 }  // namespace zbccl
 

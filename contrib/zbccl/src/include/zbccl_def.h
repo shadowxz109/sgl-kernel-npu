@@ -41,7 +41,11 @@ typedef enum {
 } zbccl_datatype_t;
 
 typedef enum {
-
+    REDUCE_SUM = 0,
+    REDUCE_PROD = 1,
+    REDUCE_MAX = 2,
+    REDUCE_MIN = 3,
+    REDUCE_RESERVED = 255
 } zbccl_reduce_op_t;
 
 typedef struct {

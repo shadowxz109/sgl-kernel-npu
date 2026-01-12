@@ -13,6 +13,7 @@
 #define ZBCCL_FUNCTIONS_H
 
 #include <string>
+#include "zbccl_defines.h"
 
 namespace zbccl {
 class Func
@@ -23,22 +24,32 @@ public:
 inline size_t getSizeFromTypeEnum(zbccl_datatype_t dtype)
 {
     switch (dtype) {
-        case zbccl_datatype_t::ZCCL_DATA_TYPE_INT8:
+    case ZCCLDataType::ZCCL_DATA_TYPE_INT8:
             return sizeof(int8_t);
-        case zbccl_datatype_t::ZCCL_DATA_TYPE_INT16:
+        case ZCCLDataType::ZCCL_DATA_TYPE_INT16:
             return sizeof(int16_t);
-        case zbccl_datatype_t::ZCCL_DATA_TYPE_INT32:
+        case ZCCLDataType::ZCCL_DATA_TYPE_INT32:
             return sizeof(int32_t);
-        case zbccl_datatype_t::ZCCL_DATA_TYPE_INT64:
+        case ZCCLDataType::ZCCL_DATA_TYPE_INT64:
             return sizeof(int64_t);
-        case zbccl_datatype_t::ZCCL_DATA_TYPE_FP16:
+        case ZCCLDataType::ZCCL_DATA_TYPE_UINT8:
+            return sizeof(uint8_t);
+        case ZCCLDataType::ZCCL_DATA_TYPE_UINT16:
+            return sizeof(uint16_t);
+        case ZCCLDataType::ZCCL_DATA_TYPE_UINT32:
+            return sizeof(uint32_t);
+        case ZCCLDataType::ZCCL_DATA_TYPE_UINT64:
+            return sizeof(uint64_t);
+        case ZCCLDataType::ZCCL_DATA_TYPE_FP16:
             return sizeof(int16_t);
-        case zbccl_datatype_t::ZCCL_DATA_TYPE_FP32:
+        case ZCCLDataType::ZCCL_DATA_TYPE_FP32:
             return sizeof(float);
-        case zbccl_datatype_t::ZCCL_DATA_TYPE_BFP16:
+        case ZCCLDataType::ZCCL_DATA_TYPE_FP64:
+            return sizeof(double);
+        case ZCCLDataType::ZCCL_DATA_TYPE_BFP16:
             return sizeof(int16_t);
         default:
-            break;
+            return 0;
     }
 }
 
